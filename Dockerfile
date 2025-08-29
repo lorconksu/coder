@@ -7,25 +7,20 @@ ENV NODE_VERSION=20
 ENV SONAR_SCANNER_VERSION=5.0.1.3006
 ENV PATH=$JAVA_HOME/bin:$MAVEN_HOME/bin:$PATH
 
-# Update system and install base packages in separate steps for better error handling
-RUN dnf makecache --refresh
-RUN dnf update -y
-RUN dnf install -y \
-        wget \
-        curl \
-        unzip \
-        sudo \
-        which \
-        procps-ng \
-        openssh-clients \
-        ca-certificates \
-        tzdata \
-        epel-release \
-        gcc \
-        gcc-c++ \
-        make \
-        git
-RUN dnf clean all
+# Install packages one group at a time to avoid transaction conflicts
+RUN dnf makecache --refresh && dnf clean all
+
+# Install essential system packages (use --allowerasing to handle curl conflicts)
+RUN dnf install -y --allowerasing curl wget unzip sudo which && dnf clean all
+
+# Install development tools
+RUN dnf install -y gcc gcc-c++ make git && dnf clean all
+
+# Install additional utilities
+RUN dnf install -y procps-ng openssh-clients ca-certificates tzdata && dnf clean all
+
+# Install EPEL repository
+RUN dnf install -y epel-release && dnf clean all
 
 # Install Java 21 LTS
 RUN dnf install -y java-21-openjdk java-21-openjdk-devel && \
@@ -44,15 +39,13 @@ RUN curl -fsSL https://rpm.nodesource.com/setup_20.x | bash - && \
 
 # Git is already installed above
 
-# Install Docker CLI
-RUN dnf install -y dnf-plugins-core && \
-    dnf config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo && \
-    dnf install -y docker-ce-cli docker-compose-plugin && \
-    dnf clean all
+# Install Docker CLI (simplified approach)
+RUN dnf install -y dnf-plugins-core && dnf clean all
+RUN dnf config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+RUN dnf install -y docker-ce-cli docker-compose-plugin && dnf clean all
 
 # Install PostgreSQL client
-RUN dnf install -y postgresql && \
-    dnf clean all
+RUN dnf install -y postgresql && dnf clean all
 
 # Install SonarQube Scanner
 RUN curl -sfL https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-${SONAR_SCANNER_VERSION}-linux.zip -o /tmp/sonar-scanner.zip && \
