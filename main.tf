@@ -28,7 +28,7 @@ data "coder_parameter" "cpu" {
   display_name = "CPU cores"
   description  = "Number of CPU cores for the workspace"
   type         = "number"
-  default      = "2"
+  default      = 2
   validation {
     min = 1
     max = 8
@@ -41,7 +41,7 @@ data "coder_parameter" "memory" {
   display_name = "Memory (GB)"
   description  = "Amount of memory in GB for the workspace"
   type         = "number"
-  default      = "4"
+  default      = 4
   validation {
     min = 2
     max = 16
@@ -54,7 +54,7 @@ data "coder_parameter" "disk_size" {
   display_name = "Disk Size (GB)"
   description  = "Size of the workspace disk in GB"
   type         = "number"
-  default      = "20"
+  default      = 20
   validation {
     min = 10
     max = 100
