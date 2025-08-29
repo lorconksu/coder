@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ssh:*)",
+      "Bash(curl:*)",
+      "Read(//mnt/c/Users/lorco/OneDrive/Pictures/Screenshots/**)",
+      "Bash(timeout:*)",
+      "Bash(sudo dnf install:*)",
+      "Bash(sudo dnf search:*)",
+      "Bash(nmap:*)",
+      "Bash(/usr/local/bin/testssl.sh:*)",
+      "mcp__playwright__browser_snapshot",
+      "mcp__playwright__browser_fill_form",
+      "mcp__playwright__browser_click",
+      "mcp__playwright__browser_navigate"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
