@@ -7,10 +7,10 @@ ENV NODE_VERSION=20
 ENV SONAR_SCANNER_VERSION=5.0.1.3006
 ENV PATH=$JAVA_HOME/bin:$MAVEN_HOME/bin:$PATH
 
-# Update system and install base packages
-RUN dnf update -y && \
-    dnf groupinstall -y "Development Tools" && \
-    dnf install -y \
+# Update system and install base packages in separate steps for better error handling
+RUN dnf makecache --refresh
+RUN dnf update -y
+RUN dnf install -y \
         wget \
         curl \
         unzip \
@@ -19,15 +19,20 @@ RUN dnf update -y && \
         procps-ng \
         openssh-clients \
         ca-certificates \
-        tzdata && \
-    dnf clean all
+        tzdata \
+        epel-release \
+        gcc \
+        gcc-c++ \
+        make \
+        git
+RUN dnf clean all
 
 # Install Java 21 LTS
 RUN dnf install -y java-21-openjdk java-21-openjdk-devel && \
     dnf clean all
 
 # Install Maven
-RUN wget https://archive.apache.org/dist/maven/maven-3/3.9.6/binaries/apache-maven-3.9.6-bin.tar.gz -O /tmp/maven.tar.gz && \
+RUN curl -sfL https://archive.apache.org/dist/maven/maven-3/3.9.6/binaries/apache-maven-3.9.6-bin.tar.gz -o /tmp/maven.tar.gz && \
     tar -xzf /tmp/maven.tar.gz -C /opt && \
     ln -s /opt/apache-maven-3.9.6 /opt/maven && \
     rm /tmp/maven.tar.gz
@@ -37,13 +42,12 @@ RUN curl -fsSL https://rpm.nodesource.com/setup_20.x | bash - && \
     dnf install -y nodejs && \
     dnf clean all
 
-# Install Git
-RUN dnf install -y git && \
-    dnf clean all
+# Git is already installed above
 
 # Install Docker CLI
-RUN dnf config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo && \
-    dnf install -y docker-ce-cli && \
+RUN dnf install -y dnf-plugins-core && \
+    dnf config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo && \
+    dnf install -y docker-ce-cli docker-compose-plugin && \
     dnf clean all
 
 # Install PostgreSQL client
@@ -51,19 +55,19 @@ RUN dnf install -y postgresql && \
     dnf clean all
 
 # Install SonarQube Scanner
-RUN wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-${SONAR_SCANNER_VERSION}-linux.zip -O /tmp/sonar-scanner.zip && \
+RUN curl -sfL https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-${SONAR_SCANNER_VERSION}-linux.zip -o /tmp/sonar-scanner.zip && \
     unzip /tmp/sonar-scanner.zip -d /opt && \
     ln -s /opt/sonar-scanner-${SONAR_SCANNER_VERSION}-linux/bin/sonar-scanner /usr/local/bin/sonar-scanner && \
     rm /tmp/sonar-scanner.zip
 
 # Install Trivy
-RUN wget https://github.com/aquasecurity/trivy/releases/download/v0.50.1/trivy_0.50.1_Linux-64bit.rpm -O /tmp/trivy.rpm && \
+RUN curl -sfL https://github.com/aquasecurity/trivy/releases/download/v0.50.1/trivy_0.50.1_Linux-64bit.rpm -o /tmp/trivy.rpm && \
     dnf install -y /tmp/trivy.rpm && \
     rm /tmp/trivy.rpm && \
     dnf clean all
 
 # Install Grype
-RUN wget https://github.com/anchore/grype/releases/download/v0.74.7/grype_0.74.7_linux_amd64.rpm -O /tmp/grype.rpm && \
+RUN curl -sfL https://github.com/anchore/grype/releases/download/v0.74.7/grype_0.74.7_linux_amd64.rpm -o /tmp/grype.rpm && \
     dnf install -y /tmp/grype.rpm && \
     rm /tmp/grype.rpm && \
     dnf clean all
