@@ -13,11 +13,7 @@ terraform {
 variable "docker_host" {
   description = "Docker host to use for workspace containers"
   type        = string
-  default     = ""
-  validation {
-    condition     = var.docker_host != ""
-    error_message = "Docker host must be specified."
-  }
+  default     = "unix:///var/run/docker.sock"
 }
 
 # Data sources
@@ -114,7 +110,7 @@ resource "docker_image" "main" {
 resource "docker_container" "workspace" {
   count = data.coder_workspace.me.start_count
   image = docker_image.main.name
-  name  = "coder-${data.coder_workspace.me.owner}-${data.coder_workspace.me.name}"
+  name  = "coder-${data.coder_workspace.me.name}"
   
   # Hostname
   hostname = data.coder_workspace.me.name
@@ -126,8 +122,7 @@ resource "docker_container" "workspace" {
   # Environment variables
   env = [
     "CODER_AGENT_TOKEN=${coder_agent.main.token}",
-    "WORKSPACE_NAME=${data.coder_workspace.me.name}",
-    "WORKSPACE_OWNER=${data.coder_workspace.me.owner}"
+    "WORKSPACE_NAME=${data.coder_workspace.me.name}"
   ]
 
   # Mount volumes
