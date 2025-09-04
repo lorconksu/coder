@@ -10,7 +10,7 @@ terraform {
 }
 
 locals {
-  username = data.coder_workspace.me.owner
+  username = data.coder_workspace.me.owner_name
 }
 
 data "coder_provisioner" "me" {
