@@ -24,6 +24,7 @@ data "coder_parameter" "python_version" {
   default      = "3.12"
   validation {
     regex = "^3\\.(11|12)$"
+    error = "Python version must be 3.11 or 3.12"
   }
   mutable = true
 }
