@@ -1,0 +1,5 @@
+display_name: "Python Web Development"
+description: "Comprehensive Python web development environment with Flask, FastAPI, and Django support"
+icon_url: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg"
+maintainer_github: "lorconksu"
+tags: ["python", "web", "flask", "fastapi", "django", "api", "poetry", "pytest"]
