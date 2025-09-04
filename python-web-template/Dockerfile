@@ -29,8 +29,8 @@ RUN ln -sf /usr/bin/python3.12 /usr/local/bin/python && \
 RUN python -m pip install --upgrade pip setuptools wheel
 
 # Install Poetry for dependency management
-RUN curl -sSL https://install.python-poetry.org | python3 - && \
-    ln -s /root/.local/bin/poetry /usr/local/bin/poetry
+# Install to /usr/local/bin directly for all users to access
+RUN curl -sSL https://install.python-poetry.org | POETRY_HOME=/usr/local python3 -
 
 # Install pipenv as alternative package manager
 RUN pip install pipenv
