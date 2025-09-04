@@ -83,8 +83,11 @@ RUN chown -R coder:coder /home/coder && \
 # Switch to coder user
 USER coder
 
-# Set npm configuration for the coder user
-RUN npm config set cache /home/coder/.npm
+# Configure npm for the coder user (local global installs)
+RUN mkdir -p /home/coder/.npm-global && \
+    npm config set prefix /home/coder/.npm-global && \
+    npm config set cache /home/coder/.npm && \
+    echo 'export PATH=/home/coder/.npm-global/bin:$PATH' >> /home/coder/.bashrc
 
 # Verify installations
 RUN java --version && \
