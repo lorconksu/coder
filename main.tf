@@ -260,22 +260,6 @@ EOF
   EOT
 }
 
-# App for accessing the workspace via web terminal
-resource "coder_app" "code-server" {
-  agent_id     = coder_agent.main.id
-  slug         = "code-server"
-  display_name = "VS Code"
-  url          = "http://localhost:8080/?folder=/home/coder/workspace"
-  icon         = "/icon/code.svg"
-  subdomain    = false
-  share        = "owner"
-
-  healthcheck {
-    url       = "http://localhost:8080/healthz"
-    interval  = 3
-    threshold = 10
-  }
-}
 
 # App for web-based terminal
 resource "coder_app" "terminal" {
