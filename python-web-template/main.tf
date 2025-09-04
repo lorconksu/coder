@@ -22,9 +22,13 @@ data "coder_parameter" "python_version" {
   description  = "Python version to use"
   type         = "string"
   default      = "3.12"
-  validation {
-    regex = "^3\\.(11|12)$"
-    error = "Python version must be 3.11 or 3.12"
+  option {
+    name  = "Python 3.12 (Latest)"
+    value = "3.12"
+  }
+  option {
+    name  = "Python 3.11 (LTS)"
+    value = "3.11"
   }
   mutable = true
 }
