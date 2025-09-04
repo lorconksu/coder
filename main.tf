@@ -116,8 +116,8 @@ resource "docker_container" "workspace" {
   hostname = data.coder_workspace.me.name
 
   # Resource constraints
-  memory  = data.coder_parameter.memory.value * 1024
-  cpus    = data.coder_parameter.cpu.value
+  memory = parseint(data.coder_parameter.memory.value, 10) * 1073741824  # GB to bytes
+  cpus   = data.coder_parameter.cpu.value  # Keep as string from parameter
 
   # Environment variables
   env = [

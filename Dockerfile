@@ -74,12 +74,17 @@ RUN useradd -m -s /bin/bash coder && \
 RUN groupadd -f docker && \
     usermod -aG docker coder
 
-# Set up working directory
+# Fix npm cache permissions and set up working directory
 WORKDIR /home/coder/workspace
-RUN chown -R coder:coder /home/coder
+RUN chown -R coder:coder /home/coder && \
+    mkdir -p /home/coder/.npm /home/coder/.config && \
+    chown -R coder:coder /home/coder/.npm /home/coder/.config
 
 # Switch to coder user
 USER coder
+
+# Set npm configuration for the coder user
+RUN npm config set cache /home/coder/.npm
 
 # Verify installations
 RUN java --version && \
