@@ -100,24 +100,14 @@ data "coder_parameter" "disk_size" {
 # Docker volumes for persistent storage
 resource "docker_volume" "workspace" {
   name = "coder-${data.coder_workspace.me.id}-workspace"
-  # Protect volume from accidental deletion
-  lifecycle {
-    prevent_destroy = true
-  }
 }
 
 resource "docker_volume" "pip_cache" {
   name = "coder-${data.coder_workspace.me.id}-pip-cache"
-  lifecycle {
-    prevent_destroy = true
-  }
 }
 
 resource "docker_volume" "poetry_cache" {
   name = "coder-${data.coder_workspace.me.id}-poetry-cache"
-  lifecycle {
-    prevent_destroy = true
-  }
 }
 
 # Docker image
