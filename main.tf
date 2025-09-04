@@ -260,13 +260,15 @@ EOF
   EOT
 }
 
+# VS Code Server using official Coder module
+# See https://registry.coder.com/modules/coder/code-server
+module "code-server" {
+  count  = data.coder_workspace.me.start_count
+  source = "registry.coder.com/coder/code-server/coder"
 
-# App for web-based terminal
-resource "coder_app" "terminal" {
-  agent_id     = coder_agent.main.id
-  slug         = "terminal"
-  display_name = "Terminal"
-  command      = "bash"
-  icon         = "/icon/terminal.svg"
-  share        = "owner"
+  # This ensures that the latest non-breaking version of the module gets downloaded
+  version = "~> 1.0"
+
+  agent_id = coder_agent.main.id
+  order    = 1
 }
