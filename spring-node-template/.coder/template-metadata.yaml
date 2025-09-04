@@ -1,0 +1,36 @@
+name: "Spring Boot & Node.js Development"
+description: "Enterprise development template with Java 21, Node.js LTS, security tools, and code quality analysis"
+icon: "/emojis/1f680.png"
+default_ttl: 8h
+max_ttl: 24h
+failure_ttl: 5m
+inactivity_ttl: 4h
+
+tags:
+  - java
+  - spring-boot
+  - nodejs
+  - maven
+  - security
+  - sonarqube
+  - postgresql
+  - docker
+  - enterprise
+
+parameters:
+  - name: docker_host
+    description: "Docker daemon host"
+    type: string
+    required: true
+    default: "unix:///var/run/docker.sock"
+
+variables:
+  CPU_MIN: 1
+  CPU_MAX: 8
+  CPU_DEFAULT: 2
+  MEMORY_MIN: 2
+  MEMORY_MAX: 16
+  MEMORY_DEFAULT: 4
+  DISK_MIN: 10
+  DISK_MAX: 100
+  DISK_DEFAULT: 20
