@@ -1,0 +1,5 @@
+display_name: "Python Data Science"
+description: "Comprehensive data science environment with Jupyter, pandas, scikit-learn, TensorFlow, PyTorch, and ML tools"
+icon_url: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/jupyter/jupyter-original.svg"
+maintainer_github: "lorconksu"
+tags: ["python", "data-science", "machine-learning", "jupyter", "pandas", "tensorflow", "pytorch", "ai", "analytics"]
