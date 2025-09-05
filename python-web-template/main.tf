@@ -434,9 +434,8 @@ EOF
         
       "django")
         echo "Setting up Django starter project..."
-        if [ ! -d myproject ]; then
+        if [ ! -f manage.py ]; then
           django-admin startproject myproject .
-          cd myproject
           python manage.py startapp api
         fi
         ;;
